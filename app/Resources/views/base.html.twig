@@ -1,13 +1,52 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
     <head>
-        <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        <meta charset="utf-8" />
+        <title>{% block title 'Osotto' %}</title>
+        {% block stylesheets %}
+            {#
+                The following stylesheets block loads in Bootstrap's LESS stylesheet, which it compiles on-the-fly.
+                If you do not have NodeJS installed, or Symfony set up to compile LESS stylesheets into CSS on-the-fly,
+                then use "%kernel.root_dir%/../vendor/twbs/bootstrap/dist/bootstrap.css" instead.
+                Same again with the main stylesheet, change it to ".css" and write it in pure CSS instead of LESS.
+            #}
+            {% stylesheets
+                "%kernel.root_dir%/../vendor/twbs/bootstrap/dist/css/bootstrap.css"
+                "@AppBundle/Resources/public/css/*.css"
+                "@AppBundle/Resources/public/color/*.css"
+            %}
+                <link href="{{ asset_url }}" rel="stylesheet" media="all" type="text/css" />
+            {% endstylesheets %}
+        {% endblock stylesheets %}
+
+        {# Define a block for document and social metadata to go. #}
+        {% block metadata %}{% endblock metadata %}
+
+        {#
+            If you don't specify an absolute path (e.g. "/path/to/file"), a bundle-relative path (e.g.
+            "@MyBundle/Path/to/file"), or a parameter-based path (e.g. "%kernel.root_dir%/path/to/file") then the
+            asset() function will assume that you mean "relative to the webroot directory" - the folder where app.php
+            is located.
+        #}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
+
     <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+
+        <div id="wrapper">
+            {% block body %}{% endblock body %}
+        </div>
+
+        {% block javascripts %}
+            {% javascripts
+                '@AppBundle/Resources/public/js/jquery.js'
+                '%kernel.root_dir%/../vendor/twbs/bootstrap/dist/js/bootstrap.js'
+                '@AppBundle/Resources/public/js/*.js'
+            %}
+                <script type="text/javascript" src="{{ asset_url }}"></script>
+            {% endjavascripts %}
+        {% endblock javascripts %}
     </body>
+
 </html>
